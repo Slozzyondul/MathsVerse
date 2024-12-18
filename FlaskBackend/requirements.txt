@@ -1,0 +1,5 @@
+#project dependencies
+
+Flask==2.0.1
+numpy==1.23.0
+pandas==1.3.3
