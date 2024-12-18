@@ -11,3 +11,6 @@
 - python3 app.py = starting the app in the activated env environment
 
 - deactivate = leaving the virtual environment
+
+2. In another terminal 
+- flutter run = start project inside lib folder
