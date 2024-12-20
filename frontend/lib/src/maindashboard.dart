@@ -9,10 +9,10 @@ class MainOptionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        
         title: const Center(child: Text('MathVerse')),
         backgroundColor: Colors.deepPurpleAccent,
         elevation: 5.0,
+        automaticallyImplyLeading: false, // Disable the default back arrow
       ),
       drawer: mainDrawer(context),
       body: Stack(
@@ -54,7 +54,7 @@ class MainOptionScreen extends StatelessWidget {
                       context,
                       icon: Icons.analytics,
                       label: 'Numerical Analysis',
-                      route: '/viewreport',
+                      route: '/numerical',
                       color: Colors.greenAccent,
                     ),
                     const SizedBox(height: 20),
@@ -62,7 +62,7 @@ class MainOptionScreen extends StatelessWidget {
                       context,
                       icon: Icons.line_axis,
                       label: 'Probability',
-                      route: '/youths',
+                      route: '/probability',
                       color: Colors.orangeAccent,
                     ),
                     const SizedBox(height: 20),
@@ -70,7 +70,7 @@ class MainOptionScreen extends StatelessWidget {
                       context,
                       icon: Icons.edit,
                       label: 'Algebra',
-                      route: '/resources',
+                      route: '/algebra',
                       color: Colors.redAccent,
                     ),
                     const SizedBox(height: 20),
@@ -78,15 +78,15 @@ class MainOptionScreen extends StatelessWidget {
                       context,
                       icon: Icons.straight,
                       label: 'Linear Algebra',
-                      route: '/policies',
+                      route: '/linearalgebra',
                       color: Colors.greenAccent,
                     ),
                     const SizedBox(height: 20),
                     buildOptionButtonMain(
                       context,
                       icon: Icons.question_answer,
-                      label: 'resources',
-                      route: '/awareness',
+                      label: 'Resources',
+                      route: '/resources',
                       color: Colors.orangeAccent,
                     ),
                   ],

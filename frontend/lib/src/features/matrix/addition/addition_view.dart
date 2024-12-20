@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// When a user changes a setting, the SettingsController is updated and
 /// Widgets that listen to the SettingsController are rebuilt.
 class MatrixMethodsView extends StatelessWidget {
-  const MatrixMethodsView({Key? key}) : super(key: key);
+  const MatrixMethodsView({super.key});
 
   static const routeName = '/matrix';
 
