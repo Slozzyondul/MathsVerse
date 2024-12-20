@@ -7,36 +7,84 @@ app = Flask(__name__)
 
 # Utility function to parse matrix input
 def parse_matrices(data):
-    try:
-        A = np.array(data.get("matrix_A"))
-        B = np.array(data.get("matrix_B", []))  # Optional for operations like inversion
-        return A, B
-    except Exception as e:
-        raise ValueError(f"Invalid matrix format: {e}")
+    if not isinstance(data, dict):
+        raise ValueError("Invalid input: data must be a dictionary")
+    
+    # Check if 'matrixA' is always present
+    if "matrixA" not in data:
+        raise KeyError("'matrixA' is required in the payload")
+    
+    # Parse matrixA
+    A = np.array(data["matrixA"])
+
+    # Check if 'matrixB' is present for operations that require two matrices (addition, subtraction, multiplication)
+    if "matrixB" in data:
+        B = np.array(data["matrixB"])
+    else:
+        B = None
+
+    return A, B
+
+
+# def parse_matrices(data):
+#     if not isinstance(data, dict):
+#         raise ValueError("Invalid input: data must be a dictionary")
+#     if "matrixA" not in data or "matrixB" not in data:
+#         raise KeyError("Both 'matrixA' and 'matrixB' are required in the payload")
+#     return np.array(data["matrixA"]), np.array(data["matrixB"])
+
 
 # Endpoint: Matrix Addition
 @app.route('/matrix/add', methods=['POST'])
 def matrix_addition():
     try:
-        data = request.json
+        # Parse JSON body
+        data = request.get_json()
+        if data is None:
+            return jsonify({"error": "Invalid JSON body"}), 400
+        
+        # Extract and validate matrices
         A, B = parse_matrices(data)
         if A.shape != B.shape:
             return jsonify({"error": "Matrices must have the same shape for addition"}), 400
+        
+        # Perform addition
         result = np.add(A, B)
         return jsonify({"result": result.tolist()})
-    except Exception as e:
+    
+    except KeyError as e:
+        return jsonify({"error": f"Missing key: {str(e)}"}), 400
+    except ValueError as e:
         return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
+
 
 # Endpoint: Matrix Multiplication
 @app.route('/matrix/multiply', methods=['POST'])
 def matrix_multiplication():
     try:
-        data = request.json
+        # Parse JSON body
+        data = request.get_json()
+        if data is None:
+            return jsonify({"error": "Invalid JSON body"}), 400
+        
+        # Extract and validate matrices
         A, B = parse_matrices(data)
+        if A.shape[1] != B.shape[0]:
+            return jsonify({"error": "Number of columns in matrixA must equal the number of rows in matrixB"}), 400
+        
+        # Perform matrix multiplication
         result = np.matmul(A, B)
         return jsonify({"result": result.tolist()})
-    except Exception as e:
+    
+    except KeyError as e:
+        return jsonify({"error": f"Missing key: {str(e)}"}), 400
+    except ValueError as e:
         return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
+
 
 # Endpoint: Matrix Inversion
 @app.route('/matrix/inverse', methods=['POST'])
